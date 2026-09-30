@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b0b0f">
+<title>Winter Arc 2026</title>
+<style>
+:root{--bg:#090a0d;--card:#12141a;--card2:#181b23;--text:#f4f5f7;--muted:#9da3ae;--line:#292d36;--accent:#d9ff4f;--accent2:#9ebf18}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#08090c,#101219 60%,#08090c);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;min-height:100vh}
+.app{max-width:620px;margin:auto;padding:env(safe-area-inset-top) 16px 40px}
+header{padding:24px 4px 18px}.eyebrow{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase}.title{font-size:38px;line-height:1;margin:7px 0 5px;font-weight:900;letter-spacing:-1.8px}.sub{color:var(--muted);font-size:14px}
+.hero{background:linear-gradient(135deg,#191d25,#0f1116);border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:0 16px 40px #0005}
+.heroTop{display:flex;justify-content:space-between;align-items:center}.day{font-size:15px;color:var(--muted)}.day strong{color:var(--text);font-size:18px}.pct{font-size:34px;font-weight:900}.bar{height:9px;background:#292d34;border-radius:99px;overflow:hidden;margin:15px 0 7px}.fill{height:100%;background:var(--accent);border-radius:99px;width:0%;transition:.3s}.dates{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 22px}.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 12px}.stat b{font-size:23px;display:block}.stat span{font-size:11px;color:var(--muted)}
+.sectionTitle{font-size:18px;font-weight:800;margin:20px 2px 10px}.dateRow{display:flex;gap:8px;align-items:center;margin-bottom:12px}.dateInput{flex:1;background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:13px;padding:13px;font-size:15px}
+.habits{display:grid;gap:9px}.habit{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:17px;padding:13px}.habit input{appearance:none;width:25px;height:25px;border:2px solid #555c68;border-radius:8px;flex:none}.habit input:checked{background:var(--accent);border-color:var(--accent)}.habit input:checked:after{content:"✓";display:block;color:#111;font-weight:900;text-align:center;line-height:21px}.habitMain{flex:1}.habitName{font-weight:700}.habitTarget{font-size:11px;color:var(--muted);margin-top:2px}
+.input{width:100%;background:#0d0f14;border:1px solid var(--line);color:var(--text);border-radius:11px;padding:9px;font-size:13px;margin-top:7px}.scoreBox{margin-top:14px;background:var(--card2);border:1px solid var(--line);border-radius:18px;padding:16px}.scoreLine{display:flex;justify-content:space-between;align-items:center}.score{font-size:32px;font-weight:900;color:var(--accent)}.note{font-size:12px;color:var(--muted);line-height:1.4;margin-top:5px}
+.actions{display:flex;gap:9px;margin-top:12px}.btn{border:1px solid var(--line);background:var(--card);color:var(--text);padding:12px 14px;border-radius:13px;font-weight:700;flex:1}.btn.primary{background:var(--accent);color:#10120d;border-color:var(--accent)}
+.history{display:grid;gap:8px}.historyItem{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);padding:13px;border-radius:14px}.historyDate{font-weight:700}.historyMeta{color:var(--muted);font-size:11px}.historyScore{font-weight:900;color:var(--accent)}
+.footer{color:#666d78;font-size:11px;text-align:center;margin:28px 0}
+.toast{position:fixed;left:50%;bottom:25px;transform:translateX(-50%) translateY(20px);background:#e9ff9a;color:#10120d;padding:10px 15px;border-radius:99px;font-weight:800;font-size:12px;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:390px){.title{font-size:34px}.grid{gap:7px}.stat{padding:12px 9px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="eyebrow">90+ Days of Discipline</div><div class="title">WINTER ARC ❄️</div><div class="sub">October 1 — December 31, 2026</div></header>
+
+<section class="hero">
+  <div class="heroTop"><div class="day">TODAY<br><strong id="dayLabel">Day —</strong></div><div class="pct" id="overallPct">0%</div></div>
+  <div class="bar"><div class="fill" id="overallFill"></div></div>
+  <div class="dates"><span>OCT 1</span><span>DEC 31</span></div>
+</section>
+
+<div class="grid">
+ <div class="stat"><b id="streak">0</b><span>DAY STREAK 🔥</span></div>
+ <div class="stat"><b id="avg">0</b><span>AVG SCORE</span></div>
+ <div class="stat"><b id="done">0</b><span>DAYS LOGGED</span></div>
+</div>
+
+<div class="sectionTitle">Daily Check-in</div>
+<div class="dateRow"><input class="dateInput" id="datePicker" type="date"><button class="btn" id="todayBtn">Today</button></div>
+
+<div class="habits">
+ <label class="habit"><input type="checkbox" data-key="steps"><div class="habitMain"><div class="habitName">🚶 Steps</div><div class="habitTarget">Target: 8,000+</div><input class="input" data-input="stepsVal" type="number" min="0" placeholder="Actual steps"></div></label>
+ <label class="habit"><input type="checkbox" data-key="workout"><div class="habitMain"><div class="habitName">🏋️ Workout</div><div class="habitTarget">Target: 30+ minutes</div><input class="input" data-input="workoutVal" type="number" min="0" placeholder="Minutes"></div></label>
+ <label class="habit"><input type="checkbox" data-key="water"><div class="habitMain"><div class="habitName">💧 Water</div><div class="habitTarget">Target: 2.5+ litres</div><input class="input" data-input="waterVal" type="number" min="0" step=".1" placeholder="Litres"></div></label>
+ <label class="habit"><input type="checkbox" data-key="diet"><div class="habitMain"><div class="habitName">🥗 Diet</div><div class="habitTarget">Target: Follow your plan</div></div></label>
+ <label class="habit"><input type="checkbox" data-key="sleep"><div class="habitMain"><div class="habitName">😴 Sleep</div><div class="habitTarget">Target: 7+ hours</div><input class="input" data-input="sleepVal" type="number" min="0" step=".1" placeholder="Hours"></div></label>
+ <label class="habit"><input type="checkbox" data-key="learning"><div class="habitMain"><div class="habitName">📚 Learning</div><div class="habitTarget">Target: 60+ minutes</div><input class="input" data-input="learningVal" type="number" min="0" placeholder="Minutes"></div></label>
+ <label class="habit"><input type="checkbox" data-key="screen"><div class="habitMain"><div class="habitName">📵 Screen Time</div><div class="habitTarget">Target: Keep it under 4 hours</div><input class="input" data-input="screenVal" type="number" min="0" step=".1" placeholder="Hours"></div></label>
+</div>
+
+<div class="scoreBox">
+ <div class="scoreLine"><div><b>Today's Score</b><div class="note">7 habits · each worth 1 point</div></div><div class="score" id="score">0/7</div></div>
+ <input class="input" id="wins" placeholder="Today's win / note (optional)">
+</div>
+<div class="actions"><button class="btn" id="clearBtn">Clear Day</button><button class="btn primary" id="saveBtn">Save Check-in ✓</button></div>
+
+<div class="sectionTitle">History</div>
+<div class="history" id="history"></div>
+<div class="footer">Your data is stored locally in this browser on this device. No account or server required.</div>
+</div>
+<div class="toast" id="toast">Saved ✓</div>
+
+<script>
+const START='2026-10-01', END='2026-12-31';
+const keys=['steps','workout','water','diet','sleep','learning','screen'];
+const storage='winterArc2026_v1';
+let db=JSON.parse(localStorage.getItem(storage)||'{}');
+
+const $=id=>document.getElementById(id);
+function localISO(d=new Date()){let x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10)}
+function clamp(n,a,b){return Math.max(a,Math.min(b,n))}
+function inRange(date){return date>=START&&date<=END}
+function dayNum(date){if(!inRange(date))return null;return Math.floor((new Date(date+'T00:00:00')-new Date(START+'T00:00:00'))/86400000)+1}
+function today(){let t=localISO();return inRange(t)?t:(t<START?START:END)}
+function load(date){
+ $('datePicker').value=date;
+ let x=db[date]||{};
+ document.querySelectorAll('[data-key]').forEach(c=>c.checked=!!x[c.dataset.key]);
+ document.querySelectorAll('[data-input]').forEach(i=>i.value=x[i.dataset.input]??'');
+ $('wins').value=x.wins||'';
+ updateScore();
+}
+function scoreCurrent(){return [...document.querySelectorAll('[data-key]')].filter(x=>x.checked).length}
+function updateScore(){$('score').textContent=scoreCurrent()+'/7'}
+function save(show=true){
+ let date=$('datePicker').value;if(!inRange(date))return;
+ let x={};
+ document.querySelectorAll('[data-key]').forEach(c=>x[c.dataset.key]=c.checked);
+ document.querySelectorAll('[data-input]').forEach(i=>x[i.dataset.input]=i.value);
+ x.wins=$('wins').value;
+ x.score=scoreCurrent();x.updated=Date.now();
+ if(x.score===0 && !x.wins && !Object.values(x).some(v=>v!==false&&v!==''&&v!==0&&v!==undefined)) delete db[date]; else db[date]=x;
+ localStorage.setItem(storage,JSON.stringify(db)); render();
+ if(show){$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1100)}
+}
+function clearDay(){let d=$('datePicker').value;delete db[d];localStorage.setItem(storage,JSON.stringify(db));load(d);render()}
+function render(){
+ let t=today(), n=dayNum(t)||1;
+ $('dayLabel').textContent='Day '+n+' / 92';
+ let logged=Object.keys(db).filter(inRange).length;
+ let scores=Object.values(db).filter((x,i)=>true).map(x=>x.score||0);
+ let avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length*10)/10:0;
+ let pct=Math.round(logged/92*100);
+ $('overallPct').textContent=pct+'%';$('overallFill').style.width=pct+'%';
+ $('done').textContent=logged;$('avg').textContent=avg;
+ let streak=0,d=new Date(t+'T00:00:00');
+ while(inRange(localISO(d)) && db[localISO(d)]?.score>0){streak++;d.setDate(d.getDate()-1)}
+ $('streak').textContent=streak;
+ let arr=Object.keys(db).filter(inRange).sort().reverse();
+ $('history').innerHTML=arr.length?arr.slice(0,12).map(d=>`<div class="historyItem"><div><div class="historyDate">${new Date(d+'T00:00:00').toLocaleDateString(undefined,{day:'numeric',month:'short'})}</div><div class="historyMeta">${db[d].wins||'Check-in completed'}</div></div><div class="historyScore">${db[d].score||0}/7</div></div>`).join(''):'<div class="historyItem"><div class="historyMeta">No check-ins yet. Start October 1. ❄️</div></div>';
+}
+$('datePicker').min=START;$('datePicker').max=END;
+$('datePicker').addEventListener('change',e=>load(e.target.value));
+$('todayBtn').onclick=()=>load(today());
+document.querySelectorAll('[data-key]').forEach(x=>x.addEventListener('change',updateScore));
+document.querySelectorAll('[data-input],#wins').forEach(x=>x.addEventListener('input',updateScore));
+$('saveBtn').onclick=()=>save(true);$('clearBtn').onclick=clearDay;
+load(today());render();
+</script>
+</body>
+</html>
